@@ -8,30 +8,62 @@ import { useNavigate } from "react-router-dom";
 
 
 function Project() {
-  const [commentData, setCommentData] = useState([]);
+  const [commentData, setCommentData] = useState<any>([]);
   const navigate = useNavigate();
 
-  const deleteComment = (id: any) => {
-    Delete("courses", id)
-      .then(() => {
-        console.log("course Deleted Successfully");
-        fetchData();
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+  // const deleteComment = (id: any) => {
+  //   Delete(`courses/${id}` , id)
+  //     .then(() => {
+  //       console.log("Course Deleted Successfully");
+  //       fetchData();
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //     });
+  // };
+
+  const deleteComment = (id : any) => {
+    if (id) {
+      Delete("courses", id)
+        .then(() => {
+          console.log("Course Deleted Successfully");
+          fetchData();
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } else {
+      console.error("Invalid ID for deletion");
+    }
   };
+
+  // const fetchData = () => {
+  //   Get("courses" )
+  //     .then((res) => {
+  //       setCommentData([...res.data]);
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //     });
+  // };
+
 
   const fetchData = () => {
-    Get("courses" )
+    Get("courses")
       .then((res) => {
-        setCommentData(res.data);
+        console.log("Response data:", res.data);
+        const courses = res.data.data; // Update this line based on the actual property structure
+        if (courses) {
+          setCommentData([...courses]);
+        } else {
+          console.error("Invalid response data structure");
+        }
       })
       .catch((err) => {
         console.error(err);
       });
   };
-
+  
   useEffect(() => {
     fetchData();
   }, []);
@@ -62,11 +94,7 @@ function Project() {
                   <b className="text-info">fee:</b>
                   {x.fee}
                 </p>
-                <p>
-                  <b className="text-info">Id:</b>
-                  {x.id}
-                </p>
-            
+
                 <IconButton
                   onClick={() => deleteComment(x.id)}
                   color="error" 

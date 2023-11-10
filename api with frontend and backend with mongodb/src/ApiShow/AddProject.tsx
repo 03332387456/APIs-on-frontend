@@ -29,7 +29,7 @@ export default function AddProject() {
   };
 
   const updatePost = () => {
-    Put("courses", id, )
+    Put(`courses/${id}`, { name, shortName, fee })
       .then((res) => {
         console.log("Post Updated Successfully ==>", res.data);
       })
@@ -42,8 +42,7 @@ export default function AddProject() {
       name,
       shortName,
       fee
-      // body,
-      // email,
+ 
     };
   
     Post("courses", newComment)
